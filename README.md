@@ -1,5 +1,9 @@
 # Sidekiq::Sequence - Sequential Sidekiq jobs.
 
+Sidekiq is awesome, but it doesn't provide any support for sequential jobs, where a sequence of jobs must be run in a set order. Sidekiq::Sequence provides a simple but powerful framework to run a sequence of Sidekiq jobs.
+
+Sidekiq::Sequence is currently only intended for use in Rails applications.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -16,9 +20,65 @@ Or install it yourself as:
 
     $ gem install sidekiq-sequence
 
+Run the Rails generator to install the database migration:
+
+    $ rails g sidekiq_sequence:install
+    $ rails db:migrate
+
 ## Usage
 
-TODO: Write usage instructions here
+Start with a Sequence class which inherits from `Sidekiq::Sequence::Base`, and define each step of the sequence:
+
+```ruby
+class ContactFormSequence < Sidekiq::Sequence::Base
+  step CreateMessage
+  step AssignMessage
+end
+```
+
+Each step should be a class that includes `Sidekiq::Sequence::Worker`, and behaves just like a regular Sidekiq Worker:
+
+```ruby
+class ContactFormSequence::CreateMessage
+  include Sidekiq::Sequence::Worker
+
+  def perform
+    # Perform your job
+  end
+end
+```
+
+Each Step is run in the order they are defined, and each is a Sidekiq worker. If a worker fails, subsequent steps will not be run, and the worker will be placed in the Sidekiq retry queue. Once it succeeds, the next stepo will be run, and so on.
+
+Start a Sequence by simply initializing the Sequence class you created:
+
+```ruby
+ContactFormSequence.new name: 'Joel', github: 'joelmoss'
+```
+
+You can pass named arguments, and these will be persisted and available in the Sequence and its workers:
+
+```ruby
+class ContactFormSequence::AssignMessage
+  include Sidekiq::Sequence::Worker
+
+  def perform
+    @data # -> { name: 'Joel', github: 'joelmoss' }
+  end
+end
+```
+
+You can also modify Sequence `data` in any worker, which is great for passing data to subsequent steps:
+
+```ruby
+class ContactFormSequence::CreateMessage
+  include Sidekiq::Sequence::Worker
+
+  def perform
+    @data[:message] = 'my message' # @data is now { name: 'Joel', github: 'joelmoss', message: 'my message' }
+  end
+end
+```
 
 ## Development
 
