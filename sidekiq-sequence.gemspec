@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = 'Sequential Sidekiq jobs'
   spec.description   = 'Create and manage sequential jobs in Sidekiq'
-  spec.homepage      = 'https://github/com/joelmoss/sidekiq-sequence'
+  spec.homepage      = 'https://github.com/joelmoss/sidekiq-sequence'
   spec.license       = 'MIT'
   spec.required_ruby_version = Gem::Requirement.new('>= 2.3.0')
 
