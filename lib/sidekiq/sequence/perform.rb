@@ -5,7 +5,7 @@ module Sidekiq
     module Perform
       def perform(id, *args)
         @record = Record.find(id)
-        @data = @record.data
+        @data = @record.data.with_indifferent_access
 
         super(*args)
 

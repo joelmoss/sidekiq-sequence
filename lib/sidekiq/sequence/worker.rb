@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/sequence/perform'
+
 module Sidekiq
   module Sequence
     module Worker
