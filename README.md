@@ -1,8 +1,10 @@
 # Sidekiq::Sequence - Sequential Sidekiq jobs.
 
-Sidekiq is awesome, but it doesn't provide any support for sequential jobs, where a sequence of jobs must be run in a set order. Sidekiq::Sequence provides a simple but powerful framework to run a sequence of Sidekiq jobs.
+Sidekiq is awesome, but it doesn't provide any support for sequential jobs, where a sequence of jobs must be run in a set order.
 
-Sidekiq::Sequence is currently only intended for use in Rails applications.
+Sidekiq::Sequence provides a simple yet powerful framework to run a sequence of Sidekiq jobs, where each job runs only when the previous job successfully completes. It relies on Sidekiq's retry functionality to handle failed jobs. So if a job fails, any subsequent jobs will not run. Once the job is retried and is successful, the next job will start.
+
+> **NOTE:** Sidekiq::Sequence is currently only intended for use in Rails applications.
 
 ## Installation
 
