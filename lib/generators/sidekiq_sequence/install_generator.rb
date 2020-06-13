@@ -19,6 +19,17 @@ module SidekiqSequence
       def migration_version
         "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
       end
+
+      def properties_type
+        case ActiveRecord::Base.connection_config[:adapter].to_s
+        when /postg/i # postgres, postgis
+          'jsonb'
+        when /mysql/i
+          'json'
+        else
+          'text'
+        end
+      end
     end
   end
 end
