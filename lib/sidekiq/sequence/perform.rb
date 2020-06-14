@@ -9,7 +9,10 @@ module Sidekiq
 
         super(*args)
 
-        @record.increment(:current_step).save!
+        # Increment the step and update data attribute.
+        @record.increment(:current_step)
+        @record.data = @data
+        @record.save!
 
         # Perform the next in sequence.
         self.class.parent.perform_step @record.current_step, @record.id
