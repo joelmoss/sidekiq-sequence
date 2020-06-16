@@ -7,7 +7,11 @@ module Sidekiq
       @@steps = []
 
       def self.step(worker_class)
-        @@steps << worker_class
+        @@steps << worker_class unless @@steps.include?(worker_class)
+      end
+
+      def self.steps
+        @@steps
       end
 
       def self.perform_step(index, id)
