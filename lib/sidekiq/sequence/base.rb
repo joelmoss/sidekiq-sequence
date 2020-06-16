@@ -7,7 +7,8 @@ module Sidekiq
       @@steps = []
 
       def self.step(worker_class)
-        @@steps << worker_class unless @@steps.include?(worker_class)
+        klass = worker_class.name
+        @@steps << klass unless @@steps.include?(klass)
       end
 
       def self.steps
@@ -19,7 +20,7 @@ module Sidekiq
           # No more steps in the sequence, so delete the record.
           Record.destroy id
         else
-          @@steps[index].perform_async id
+          @@steps[index].constantize.perform_async id
         end
       end
 
