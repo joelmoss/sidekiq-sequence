@@ -28,7 +28,7 @@ module Sidekiq
         record = Record.create(data: data)
 
         # Start first job in the sequence.
-        @@steps.first.perform_async record.id
+        @@steps.first.constantize.perform_async record.id
       end
     end
     # rubocop:enable Style/ClassVars
