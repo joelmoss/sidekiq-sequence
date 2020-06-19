@@ -2,25 +2,22 @@
 
 module Sidekiq
   module Sequence
-    # rubocop:disable Style/ClassVars
     class Base
-      @@steps = []
+      class << self
+        attr_reader :steps
 
-      def self.step(worker_class)
-        klass = worker_class.name
-        @@steps << klass unless @@steps.include?(klass)
-      end
-
-      def self.steps
-        @@steps
+        def step(worker_class)
+          @steps = [] if steps.nil?
+          @steps << worker_class.name
+        end
       end
 
       def self.perform_step(index, id)
-        if index >= @@steps.size
+        if index >= steps.size
           # No more steps in the sequence, so delete the record.
           Record.destroy id
         else
-          @@steps[index].constantize.perform_async id
+          steps[index].constantize.perform_async id
         end
       end
 
@@ -28,9 +25,8 @@ module Sidekiq
         record = Record.create(data: data)
 
         # Start first job in the sequence.
-        @@steps.first.constantize.perform_async record.id
+        steps.first.constantize.perform_async record.id
       end
     end
-    # rubocop:enable Style/ClassVars
   end
 end

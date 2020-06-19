@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+require 'autotest/suffix'
+require 'autotest/restart'
+require 'autotest/bundler'
+
+Autotest.add_hook :initialize do |at|
+  at.testlib = 'minitest/autorun'
+  at.add_exception '.git'
+end
