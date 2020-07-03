@@ -25,7 +25,7 @@ module Sidekiq
         record = Record.create(data: data)
 
         # Start first job in the sequence.
-        steps.first.constantize.perform_async record.id
+        self.class.steps.first.constantize.perform_async record.id
       end
     end
   end
