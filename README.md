@@ -61,7 +61,7 @@ ContactFormSequence.new name: 'Joel', github: 'joelmoss'
 You can pass named arguments, and these will be persisted and available in the Sequence and its workers:
 
 ```ruby
-class ContactFormSequence::AssignMessage
+class ContactFormSequence::CreateMessage
   include Sidekiq::Sequence::Worker
 
   def perform
@@ -73,7 +73,7 @@ end
 You can also modify Sequence `data` in any worker, which is great for passing data to subsequent steps:
 
 ```ruby
-class ContactFormSequence::CreateMessage
+class ContactFormSequence::AssignMessage
   include Sidekiq::Sequence::Worker
 
   def perform
