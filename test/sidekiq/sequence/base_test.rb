@@ -3,12 +3,15 @@
 require 'test_helper'
 
 class FirstSequence < Sidekiq::Sequence::Base; end
+
 class SecondSequence < Sidekiq::Sequence::Base
   class Step1; end
+
   class Step2; end
   step Step1
   step Step2
 end
+
 class ThirdSequence < Sidekiq::Sequence::Base
   class Step1; end
   step Step1

@@ -15,7 +15,11 @@ module Sidekiq
         @record.save!
 
         # Perform the next in sequence.
-        self.class.parent.perform_step @record.current_step, @record.id
+        if ::Rails.version.to_f >= 6.0
+          self.class.module_parent.perform_step @record.current_step, @record.id
+        else
+          self.class.parent.perform_step @record.current_step, @record.id
+        end
       end
     end
   end
