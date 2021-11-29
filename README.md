@@ -50,7 +50,7 @@ class ContactFormSequence::CreateMessage
 end
 ```
 
-Each Step is run in the order they are defined, and each is a Sidekiq worker. If a worker fails, subsequent steps will not be run, and the worker will be placed in the Sidekiq retry queue. Once it succeeds, the next stepo will be run, and so on.
+Each Step is run in the order they are defined, and each is a Sidekiq worker. If a worker fails, subsequent steps will not be run, and the worker will be placed in the Sidekiq retry queue. Once it succeeds, the next step will be run, and so on.
 
 Start a Sequence by simply initializing the Sequence class you created:
 
