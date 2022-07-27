@@ -21,7 +21,7 @@ module SidekiqSequence
       end
 
       def properties_type
-        case ActiveRecord::Base.connection_config[:adapter].to_s
+        case ActiveRecord::Base.connection_db_config[:adapter].to_s
         when /postg/i # postgres, postgis
           'jsonb'
         when /mysql/i
